@@ -13,15 +13,12 @@ RUN go build \
   -o /bin/app \
   .
 
-RUN echo "nobody:x:65534:65534:Nobody:/:" > /etc_passwd
-
 
 
 FROM scratch
 
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /etc_passwd /etc/passwd
-COPY --from=builder --chown=65534:0 /bin/app /app
+COPY --from=builder /bin/app /app
 
-USER nobody
 ENTRYPOINT ["/app"]
