@@ -9,29 +9,34 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/sethvargo/go-githubactions"
+	ga "github.com/sethvargo/go-githubactions"
 )
 
 func main() {
 	ctx := context.Background()
-	gCtx, err := githubactions.Context()
+	gCtx, err := ga.Context()
 	if err != nil {
-		githubactions.Fatalf("failed to get context: %v", err)
+		ga.Fatalf("failed to get context: %v", err)
 	}
 	audience := `https://github.com/` + gCtx.RepositoryOwner
 
-	idToken, err := githubactions.GetIDToken(ctx, audience)
+	idToken, err := ga.GetIDToken(ctx, audience)
 	if err != nil {
-		githubactions.Fatalf("failed to get ID token: %v", err)
+		ga.Fatalf("failed to get ID token: %v", err)
 	}
 
-	iamToken, err := postIDToken(idToken, audience)
-	if err != nil {
-		githubactions.Fatalf("failed to get IAM token: %v", err)
+	saID := ga.GetInput("sa_id")
+	if saID == "" {
+		ga.Fatalf("service account ID is required")
 	}
-	githubactions.SetOutput("access_token", iamToken.AccessToken)
-	githubactions.AddMask(iamToken.AccessToken)
-	githubactions.Infof("IAM token fetched successfully")
+
+	iamToken, err := postIDToken(idToken, saID)
+	if err != nil {
+		ga.Fatalf("failed to get IAM token: %v", err)
+	}
+	ga.SetOutput("access_token", iamToken.AccessToken)
+	ga.AddMask(iamToken.AccessToken)
+	ga.Infof("IAM token fetched successfully")
 }
 
 type IAMTokenResponse struct {
@@ -40,14 +45,14 @@ type IAMTokenResponse struct {
 	ExpiresIn   int    `json:"expires_in"`
 }
 
-func postIDToken(token string, audience string) (*IAMTokenResponse, error) {
+func postIDToken(token string, saID string) (*IAMTokenResponse, error) {
 	uri := "https://auth.yandex.cloud/oauth/token"
 
 	// Construct the URL-encoded data
 	data := url.Values{}
 	data.Set("grant_type", "urn:ietf:params:oauth:grant-type:token-exchange")
 	data.Set("requested_token_type", "urn:ietf:params:oauth:token-type:access_token")
-	data.Set("audience", audience)
+	data.Set("audience", saID)
 	data.Set("subject_token", token)
 	data.Set("subject_token_type", "urn:ietf:params:oauth:token-type:id_token")
 
