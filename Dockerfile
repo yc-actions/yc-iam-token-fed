@@ -18,7 +18,6 @@ RUN go build \
 FROM scratch
 
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /etc_passwd /etc/passwd
 COPY --from=builder /bin/app /app
 
 ENTRYPOINT ["/app"]
