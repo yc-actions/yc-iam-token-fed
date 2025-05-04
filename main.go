@@ -25,7 +25,7 @@ func main() {
 		ga.Fatalf("failed to get ID token: %v", err)
 	}
 
-	saID := ga.GetInput("sa_id")
+	saID := ga.GetInput("yc-sa-id")
 	if saID == "" {
 		ga.Fatalf("service account ID is required")
 	}
@@ -34,7 +34,7 @@ func main() {
 	if err != nil {
 		ga.Fatalf("failed to get IAM token: %v", err)
 	}
-	ga.SetOutput("access_token", iamToken.AccessToken)
+	ga.SetOutput("token", iamToken.AccessToken)
 	ga.AddMask(iamToken.AccessToken)
 	ga.Infof("IAM token fetched successfully")
 }
