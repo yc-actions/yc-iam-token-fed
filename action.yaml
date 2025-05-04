@@ -1,0 +1,18 @@
+name: 'YC IAM Token via Workload Identity Federation'
+description: 'GitHub Action issuing Yandex Cloud IAM Token.'
+author: 'Nikolay Matrosov'
+inputs:
+  yc-sa-id:
+    required: true
+    description: 'Yandex Cloud Service Account ID'
+
+outputs:
+  token:
+    description: 'IAM Token.'
+
+branding:
+  color: blue
+  icon: log-in
+runs:
+  using: docker
+  image: 'Dockerfile'
