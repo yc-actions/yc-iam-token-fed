@@ -6,7 +6,10 @@ The action issues new Yandex Cloud IAM token and puts it in the output.
 
 <!-- toc -->
 
+- [GitHub Action issuing Yandex Cloud IAM Token](#github-action-issuing-yandex-cloud-iam-token)
 - [Usage](#usage)
+  - [Action Inputs](#action-inputs)
+  - [Action Outputs](#action-outputs)
 - [Prerequisites](#prerequisites)
 - [License Summary](#license-summary)
 
@@ -41,7 +44,29 @@ service account ID provided in the `yc-sa-id` input.
 
 ## Prerequisites
 
-To perform this action, service account is required.
+To perform this action, Service account and Workload identity federation is required.
+For setting up Workload identity federation please refer to the [official YC turtorial](https://yandex.cloud/en/docs/tutorials/security/wlif-github-integration). Lockbox-related steps could be ommited.
+
+
+Kindly note that your workflow definition must include `id-token` permission in configuration root to use this action.
+Otherwise, error `failed to get ID token: missing ACTIONS_ID_TOKEN_REQUEST_URL in environment` will be thrown.
+
+```yaml
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  id-token: write # This is required for requesting Github OIDC token used for authentocation in YC.
+
+jobs:
+  ...
+```
+
+For more details refer to the [official Github documentation](https://docs.github.com/en/actions/reference/security/oidc#required-permission)
 
 ## License Summary
 
