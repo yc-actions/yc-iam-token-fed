@@ -45,7 +45,7 @@ service account ID provided in the `yc-sa-id` input.
 ## Prerequisites
 
 To perform this action, Service account and Workload identity federation is required.
-For setting up Workload identity federation please refer to the [official YC turtorial](https://yandex.cloud/en/docs/tutorials/security/wlif-github-integration). Lockbox-related steps could be ommited.
+For setting up Workload identity federation please refer to the [official YC tutorial](https://yandex.cloud/en/docs/tutorials/security/wlif-github-integration). Lockbox-related steps could be ommited.
 
 
 Kindly note that your workflow definition must include `id-token` permission in configuration root to use this action.
