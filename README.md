@@ -67,6 +67,7 @@ jobs:
 ```
 
 For more details refer to the [official Github documentation](https://docs.github.com/en/actions/reference/security/oidc#required-permission)
+or to the [blog post](https://nikolaymatrosov.ru/2025-05-04-Authorizing-in-GitHub-Actions-via-Workload-Identities/?utm_source=github&utm_medium=yc-actions&utm_campaign=yc-iam-token-fed) describing the action (in Russian).
 
 ## License Summary
 
